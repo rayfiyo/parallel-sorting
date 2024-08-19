@@ -1,29 +1,33 @@
 package sort
 
-func Quick(arr []int) {
-	if len(arr) < 2 {
-		return
+type QuickSort struct{}
+
+func (qs QuickSort) Name() string {
+	return "QuickSort"
+}
+
+func (qs QuickSort) Sort(arr []int) []int {
+	if len(arr) <= 1 {
+		return arr
 	}
 
 	pivot := arr[len(arr)/2]
-	left := 0
-	right := len(arr) - 1
+	left := make([]int, 0)
+	right := make([]int, 0)
+	equal := make([]int, 0)
 
-	for left <= right {
-		for arr[left] < pivot {
-			left++
-		}
-		for arr[right] > pivot {
-			right--
-		}
-
-		if left <= right {
-			arr[left], arr[right] = arr[right], arr[left]
-			left++
-			right--
+	for _, num := range arr {
+		if num < pivot {
+			left = append(left, num)
+		} else if num > pivot {
+			right = append(right, num)
+		} else {
+			equal = append(equal, num)
 		}
 	}
 
-	Quick(arr[:left])
-	Quick(arr[left:])
+	left = qs.Sort(left)
+	right = qs.Sort(right)
+
+	return append(append(left, equal...), right...)
 }

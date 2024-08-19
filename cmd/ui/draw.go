@@ -16,25 +16,21 @@ func Draw(values []int, title string) error {
 	if len(values) > max {
 		return fmt.Errorf("upper limit exceeded@cmd.Ui")
 	}
-
 	t, err := tcell.New()
 	if err != nil {
 		return fmt.Errorf("1@cmd.Ui: %w", err)
 	}
 	defer t.Close()
-
 	ctx, cancel := context.WithCancel(context.Background())
 	bc, err := barchart.New(
 		barchart.ShowValues(),
-		barchart.BarWidth(1+50/len(values)), // len(values) > 50 ? 1 : 2
+		barchart.BarWidth(1+50/len(values)),
 	)
 	if err != nil {
 		cancel()
 		return fmt.Errorf("2@cmd.Ui: %w", err)
 	}
-
 	go playBarChart(ctx, bc, &values)
-
 	c, err := container.New(
 		t,
 		container.Border(linestyle.Light),
@@ -45,17 +41,14 @@ func Draw(values []int, title string) error {
 		cancel()
 		return fmt.Errorf("3@cmd.Ui: %w", err)
 	}
-
 	keyboardHandler := func(k *terminalapi.Keyboard) {
 		if k.Key == 'q' || k.Key == 'Q' {
 			cancel()
 		}
 	}
-
 	if err := termdash.Run(ctx, t, c,
 		termdash.KeyboardSubscriber(keyboardHandler)); err != nil {
 		return fmt.Errorf("4@cmd.Ui: %w", err)
 	}
-
 	return nil
 }
