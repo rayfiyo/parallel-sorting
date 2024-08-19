@@ -1,27 +1,29 @@
 package sort
 
-func Quick(arr []int) []int {
+func Quick(arr []int) {
 	if len(arr) < 2 {
-		return arr
+		return
 	}
 
-	left, right := 0, len(arr)-1
+	pivot := arr[len(arr)/2]
+	left := 0
+	right := len(arr) - 1
 
-	pivot := len(arr) / 2
-
-	arr[pivot], arr[right] = arr[right], arr[pivot]
-
-	for i := range arr {
-		if arr[i] < arr[right] {
-			arr[i], arr[left] = arr[left], arr[i]
+	for left <= right {
+		for arr[left] < pivot {
 			left++
+		}
+		for arr[right] > pivot {
+			right--
+		}
+
+		if left <= right {
+			arr[left], arr[right] = arr[right], arr[left]
+			left++
+			right--
 		}
 	}
 
-	arr[left], arr[right] = arr[right], arr[left]
-
 	Quick(arr[:left])
-	Quick(arr[left+1:])
-
-	return arr
+	Quick(arr[left:])
 }

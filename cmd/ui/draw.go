@@ -33,7 +33,7 @@ func Draw(values []int, title string) error {
 		return fmt.Errorf("2@cmd.Ui: %w", err)
 	}
 
-	go playBarChart(ctx, bc, &values)
+	go PlaySort(ctx, bc, values)
 
 	c, err := container.New(
 		t,

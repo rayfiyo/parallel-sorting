@@ -5,14 +5,18 @@ import (
 	"time"
 )
 
-func RandomNumber(length int) []int {
+func RandomNumber(n int) []int {
 	rand.NewSource(time.Now().UnixNano())
-	arr := make([]int, length)
 
-	for i := range arr {
-		// 0から99までのランダムな整数を生成
-		arr[i] = rand.Intn(100)
+	values := make([]int, n)
+	for i := 0; i < n; i++ {
+		values[i] = i + 1
 	}
 
-	return arr
+	// Fisher-Yates シャッフルアルゴリズムでランダムに並べ替え
+	rand.Shuffle(len(values), func(i, j int) {
+		values[i], values[j] = values[j], values[i]
+	})
+
+	return values
 }
